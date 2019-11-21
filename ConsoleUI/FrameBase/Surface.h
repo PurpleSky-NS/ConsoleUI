@@ -36,7 +36,7 @@ public:
 	/*界面从界面栈中删除时回调*/
 	void OnClose() {}
 
-protected:
+private:
 	UIComponent* m_onEventCom = nullptr;
 	std::vector<UIComponent*> m_components;
 };
