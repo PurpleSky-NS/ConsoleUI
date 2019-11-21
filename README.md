@@ -29,7 +29,41 @@
 
 ### 界面
 Surface为界面的基类，自定义的界面最好继承自该类<br>
+<br>
+该类作为UI组件的容器，有如下方法操作组件<br>
+```
+/*加入的顺序即为显示的优先级顺序*/
+void Add(UIComponent* com);
 
+/*删除后不会释放内存*/
+void Remove(UIComponent* com);
 
+/*全部删除，不会释放内存*/
+void RemoveAll();
 
+/*全部删除，会释放内存*/
+void Clear();
+```
+子类可以重写如下方法<br>
+```
+/*传递事件字符*/
+virtual void PostEvent(char inputText);
+
+/*界面被添加到界面栈中回调*/
+virtual void OnStart() {}
+
+/*界面从界面栈中删除时回调*/
+virtual void OnClose() {}
+```
+当用户有输入的时候，会通过PostEvent方法来传递用户输入字符(一次一个)<br>
+默认的PostEvent方法，处理了**事件UI组件**的流程，如果不需要这套机制可以重写，或者在它的基础上做一些处理<br>
+<br>
+在任何地方都可以调用该方法来刷新界面
+```
+void Refresh();
+```
+默认使用_system("cls")_来清空控制台，如果不在Windows上或者有其他方法，可以调用以下方法设置清空控制台的方法
+```
+static void SetConsoleClearCall(std::function<void()> onConsoleClear);
+```
 # 其他的内容晚些时候再更新
