@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <vector>
+#include <functional>
 #include "Displayer.h"
 #include "UIComponent.h"
 
@@ -9,6 +10,9 @@
 class Surface
 {
 public:
+
+	/*设置刷新控制台的回调*/
+	static void SetConsoleClearCall(std::function<void()> onConsoleClear);
 
 	virtual ~Surface();
 
@@ -37,6 +41,7 @@ public:
 	virtual void OnClose() {}
 
 private:
+	static std::function<void()> m_onConsoleClear;
 	UIComponent* m_onEventCom = nullptr;
 	std::vector<UIComponent*> m_components;
 };

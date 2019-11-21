@@ -1,4 +1,11 @@
 ﻿#include "Surface.h"
+std::function<void()> Surface::m_onConsoleClear = []() {system("cls"); };
+
+void Surface::SetConsoleClearCall(std::function<void()> onConsoleClear)
+{
+	m_onConsoleClear = onConsoleClear;
+}
+
 Surface::~Surface()
 {
 	Clear();
@@ -6,7 +13,7 @@ Surface::~Surface()
 
 void Surface::Refresh()
 {
-	system("cls");
+	m_onConsoleClear();
 	for (auto& i : m_components)
 		i->OnPrint();
 	cp.DisplayLine().Flush();
