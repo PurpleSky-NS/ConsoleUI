@@ -62,7 +62,7 @@ virtual void OnClose() {}
 ```
 void Refresh();
 ```
-默认使用**（system("cls")）**来清空控制台，如果不在Windows上或者有其他方法，可以调用以下方法设置清空控制台的方法
+默认使用(**system("cls")**)来清空控制台，如果不在Windows上或者有其他方法，可以调用以下方法设置清空控制台的方法
 ```
 static void SetConsoleClearCall(std::function<void()> onConsoleClear);
 ```
