@@ -164,6 +164,6 @@ inline Displayer& Displayer::DisplayIOSFlag(int mask)
 
 inline Displayer& Displayer::UnDisplayIOSFlag(int mask)
 {
-	m_buf.setf(mask);
+	m_buf.unsetf(mask);
 	return *this;
 }
