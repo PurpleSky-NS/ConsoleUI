@@ -396,10 +396,10 @@ void StartFrame()
 }
 ```
 
-![菜单](/image/MenuTest0.png)
+![菜单](/image/TestMenu0.png)
 
 <br>
 
-![选择选项](/image/MenuTest1.png)
+![选择选项](/image/TestMenu1.png)
 
 # 其他的内容晚些时候再更新使用的
