@@ -677,3 +677,7 @@ void StartFrame()
 
 ![数据表](/image/TestTable0.png) <br>
 ![翻页](/image/TestTable1.png)
+
+## 其他
+这里有一个我用这个框架编写的小项目，可以参考：<br>
+[https://github.com/PurpleSky-NS/ATMSystem-With-ConsoleUI-](https://github.com/PurpleSky-NS/ATMSystem-With-ConsoleUI-)
