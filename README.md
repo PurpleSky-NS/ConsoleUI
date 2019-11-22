@@ -334,5 +334,8 @@ void StartFrame()
 	SurfaceManager::GetInstance().Start(new MySurface);
 }
 ```
-
-# 其他的内容晚些时候再更新
+![运行结果](/imgae/Test0.png)
+![输入字符](/imgae/Test1.png)
+**注意：**
+没有使用命令行输入缓冲，使用的是 *_getch* 函数传递事件字符，所以，退格字符等事件需要自己编写
+# 其他的内容晚些时候再更新使用的
