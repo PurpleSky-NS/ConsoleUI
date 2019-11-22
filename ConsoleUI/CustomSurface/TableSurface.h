@@ -9,7 +9,7 @@ template<class ItemType>
 class TableSurface : public Surface
 {
 public:
-	/*子项的容器接口*/
+	/*子项的容器接口，需要由开发者实现该接口，以便设置数据源*/
 	class ItemContainer
 	{
 	public:
@@ -122,33 +122,62 @@ private:
 
 protected:
 
+	/* 构造函数
+	 * 参数:
+	 * @title:表名
+	 */
 	TableSurface(const std::string& title)
 	{
 		Add(new TitleCom(title));
 		Add(m_table = new TableCom(std::bind(&TableSurface::OnItemTitlePrint, this), std::bind(&TableSurface::OnItemPrint, this, std::placeholders::_1, std::placeholders::_2)));
 	}
 
-	/*显示子项的时候调用，返回是否显示，是否是最后一项*/
+	/* 显示子项的时候回调
+	 * 参数:
+	 * @item:要显示的数据
+	 * @isLastItem:是否是该页最后一个数据
+	 * return:
+	 * bool @返回是否显示
+	 */
 	virtual bool OnItemPrint(const ItemType& item, bool isLastItem) { return false; }
 
-	/*显示子项标题的时候调用*/
+	/* 显示子项标题的时候回调
+	 * return:
+	 * @bool 返回是否显示
+	 */
 	virtual bool OnItemTitlePrint() { return false; }
 
+	/* 设置每页显示的数据个数
+	 * 参数:
+	 * @count:个数，不能为0
+	 */
 	void SetPageItemsCount(unsigned count)
 	{
 		m_table->SetPageItemsCount(count);
 	}
 
+	/* 获取每页显示的数据个数
+	 * return:
+	 * @unsigend 每页显示的数据个数
+	 */
 	unsigned GetPageItemsCount(unsigned count)const
 	{
 		return m_table->GetPageItemsCount();
 	}
 
+	/* 设置数据源
+	 * 参数:
+	 * @container:你的数据源 @ItemContainer，若为nullptr则表示无数据
+	 */
 	void SetContainer(ItemContainer* container)
 	{
 		m_table->SetContainer(container);
 	}
 
+	/* 获取数据源
+	 * return:
+	 * @ItemContainer 数据源
+	 */
 	ItemContainer* GetContainer()const
 	{
 		return m_table->GetContainer();
