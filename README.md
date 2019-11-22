@@ -334,11 +334,59 @@ void StartFrame()
 	SurfaceManager::GetInstance().Start(new MySurface);
 }
 ```
-
-![运行结果](/image/Test0.png)<br>
-
-![输入字符](/image/Test1.png)<br>
-
 **注意：**
 没有使用命令行输入缓冲，使用的是 *_getch* 函数传递事件字符，所以，退格字符等事件需要自己编写
+
+### 内置的界面类
+提供了一些写好的界面类以便用户快速开发
+#### MenuSurface
+一个菜单界面，用户只需要继承自该类并且做相关配置即可使用<br>
+1. 继承自该类并且调用父类构造函数指定标题
+```
+class MyMenu :public MenuSurface
+{
+public:
+	MyMenu() :
+		MenuSurface("我的标题")
+	{}
+};
+```
+2. 调用MenuSurface的该方法添加菜单子项，第一个参数是菜单的标题，第二个参数是一个回调函数（函数返回值为void，参数为空）
+```
+void AddItem(const std::string& itemName, std::function<void()> onSelected);
+```
+* 测试代码如下：
+```
+//TestMenu.h
+#pragma once
+
+#include "UIFrame.h"
+
+class MyMenu :public MenuSurface
+{
+public:
+	MyMenu() :
+		MenuSurface("我的标题")//必须指定标题
+	{
+		/*添加子项，传入名称和一个lambda表达式*/
+		AddItem("打印一个错误信息", [&]()
+			{
+				cp.DisplayError("一个错误信息");
+				Refresh();
+			});
+		AddItem("打印一个提示信息", [&]()
+			{
+				cp.DisplayOK("一个提示信息");
+				Refresh();
+			});
+	}
+};
+
+//MyMain.cpp
+#include "TestMenu.h"
+void StartFrame()
+{
+	SurfaceManager::GetInstance().Start(new MyMenu);
+}
+```
 # 其他的内容晚些时候再更新使用的
