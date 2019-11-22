@@ -10,14 +10,14 @@ class EditorSurface : public Surface
 {
 public:
 	/*输入字符时回调
-	 * 返回值：是否通过测试
-	 * 参数：输入的字符
+	 * 返回值:是否通过测试
+	 * 参数:输入的字符
 	 */
 	typedef std::function<bool(char)> OnInputTest;
 	/*数据输入完成/切换输入数据选项回调
-	 * 返回值：是否通过测试
-	 * 第一个参数：输入的文本
-	 * 第二个参数：错误提示文本，设置该值来设置错误信息，若设为空字符串则于返回true效果相同
+	 * 返回值:是否通过测试
+	 * 第一个参数:输入的文本
+	 * 第二个参数:错误提示文本，设置该值来设置错误信息，若设为空字符串则于返回true效果相同
 	 */
 	typedef std::function<bool(std::string&, std::string&)> OnFinishTest;
 
@@ -40,8 +40,8 @@ public:
 private:
 
 	/*数据提交时回调
-	 * 返回值：是否关闭编辑界面
-	 * 参数：unordered_map 保存数据的名称与内容的表
+	 * 返回值:是否关闭编辑界面
+	 * 参数:unordered_map 保存数据的名称与内容的表
 	 */
 	typedef std::function<bool(const std::unordered_map<std::string, std::string>&)> OnPost;
 
@@ -267,7 +267,7 @@ private:
 			cp.DisplayTab(2).DisplayLine(m_title)
 				.DisplayLine()
 				.DisplayTab().DisplayLine(m_describe).DisplayLine()
-				.DisplayLine("操作说明：")
+				.DisplayLine("操作说明:")
 				.DisplaySpace(4).DisplayLine("√ 使用Tab键切换输入框")
 				.DisplaySpace(4).DisplayLine("√ 输入完成按下回车即可提交输入数据")
 				.DisplaySpace(4).DisplayLine("√ 也可以选择最后几个选项进行相关操作").DisplayLine();
@@ -280,6 +280,11 @@ private:
 
 protected:
 
+	/* 构造函数
+	 * 参数:
+	 * @title:表单标题
+	 * @describe:表单描述
+	 */
 	EditorSurface(const std::string& title, const std::string& describe)
 	{
 		m_editor = new EditorCom(std::bind(&EditorSurface::OnPostData, this, std::placeholders::_1));
@@ -287,32 +292,65 @@ protected:
 		Add(m_editor);
 	}
 
-	/*如果tips为空则不显示提示，会抛出DataExistedException*/
+
+	/* 添加可编辑项
+	 * 参数:
+	 * @name:数据ID（应保证唯一）
+	 * @text:显示的名称
+	 * @tips:输入的提示，若为空，则没有提示，（如:"不少于10位数字")
+	 * @onTestInput:判断输入字符的回调函数 @OnInputTest
+	 * @onFinishTest:用户完成输入该项输入的回调函数 @OnFinishTest
+	 * @isMask:是否使用字符遮掩(如密码输入)(默认false)
+	 * @defaultInput:文本框默认值(默认"")
+	 * throws:
+	 * @ DataExistedException 若ID已存在则会抛出此异常
+	 */
 	void AddEditableData(const std::string& name, const std::string& text, const std::string& tips, OnInputTest onTestInput, OnFinishTest onFinishTest, bool isMask = false, const std::string defaultInput = "")throw(DataExistedException)
 	{
 		m_editor->AddEditableData(name, text, tips, onTestInput, onFinishTest, isMask, defaultInput);
 	}
 
-	/*获取所有的数据名称*/
+	/* 获取所有可编辑项的ID
+	 * return:
+	 * @std::vector<std::string> 所有ID的集合
+	 */
 	std::vector<std::string> GetDatasName()const
 	{
 		return m_editor->GetDatasName();
 	}
 
-	/*根据数据的名称(name)获取输入的数据，会抛出DataNotFoundException*/
-	std::string& GetInputData(const std::string& text)throw(DataNotFoundException)
+	/* 根据数据的ID获取输入的数据
+	 * 参数:
+	 * @name:数据的ID
+	 * return:
+	 * @std::string& 一个可以修改的字符串
+	 * throw
+	 * @DataNotFoundException 数据不存在抛出这个
+	 */
+	std::string& GetInputData(const std::string& name)throw(DataNotFoundException)
 	{
-		return m_editor->GetInput(text);
+		return m_editor->GetInput(name);
 	}
 
-	/*设置某项数据的错误信息，使之错误，若errMsg为空字符串则清除错误*/
+	/* 设置某项数据的错误信息，使之错误
+	 * 参数:
+	 * @name:数据的ID
+	 * @errMsg:错误信息，若为空字符串则清除错误
+	 * throw
+	 * @DataNotFoundException 数据不存在抛出这个
+	 */
 	void SetErrorText(const std::string& name, const std::string& errMsg)throw(DataNotFoundException)
 	{
 		m_editor->SetErrorText(name, errMsg);
 	}
 
-	/*用户提交数据回调，返回是否关闭该界面*/
-	virtual bool OnPostData(const std::unordered_map<std::string, std::string>&) { return true; }
+	/* 用户提交数据回调，返回
+	 * 参数:
+	 * @mappingData:所有数据的键值对，以数据的ID为键，输入内容为值
+	 * return:
+	 * @bool 是否关闭该界面
+	 */
+	virtual bool OnPostData(const std::unordered_map<std::string, std::string>& mappingData) { return true; }
 
 private:
 	EditorCom* m_editor;
