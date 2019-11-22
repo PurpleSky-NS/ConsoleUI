@@ -540,4 +540,137 @@ void StartFrame()
 ![输入](/image/TestEditor0.png) <br>
 ![提交按钮](/image/TestEditor1.png)
 
-# 其他的内容晚些时候再更新使用的
+#### TableSurface
+一个列表显示数据的页面，可以实现翻页显示数据<br>
+下面给出各个定义：
+```
+/*子项的容器接口，需要由开发者实现该接口，以便设置数据源*/
+class ItemContainer
+{
+public:
+
+	virtual const ItemType& Get(size_t pos) = 0;
+
+	virtual size_t Size()const = 0;
+
+	virtual size_t Empty()const = 0;
+
+};
+
+/* 构造函数
+ * 参数:
+ * @title:表名
+ */
+TableSurface(const std::string& title);
+
+/* 显示子项的时候回调
+ * 参数:
+ * @item:要显示的数据
+ * @isLastItem:是否是该页最后一个数据
+ * return:
+ * bool @返回是否显示
+ */
+virtual bool OnItemPrint(const ItemType& item, bool isLastItem);
+
+/* 显示子项标题的时候回调
+ * return:
+ * @bool 返回是否显示
+ */
+virtual bool OnItemTitlePrint();
+
+/* 设置每页显示的数据个数
+ * 参数:
+ * @count:个数，不能为0
+ */
+void SetPageItemsCount(unsigned count);
+
+/* 获取每页显示的数据个数
+ * return:
+ * @unsigend 每页显示的数据个数
+ */
+unsigned GetPageItemsCount(unsigned count)const;
+
+/* 设置数据源
+ * 参数:
+ * @container:你的数据源 @ItemContainer，若为nullptr则表示无数据
+ */
+void SetContainer(ItemContainer* container);
+
+/* 获取数据源
+ * return:
+ * @ItemContainer 数据源
+ */
+ItemContainer* GetContainer()const;
+
+```
+下面给出示例：
+```
+//MyTable.h
+#pragma once
+
+#include "UIFrame.h"
+class MyTable :public TableSurface<PersonStruct>
+{
+	class PersonContainer :public ItemContainer
+	{
+		PersonStruct m_people[11] //测试用数据
+		{
+			{"余美",20,false},
+			{"龙美",38,false},
+			{"图美",138,false},
+			{"张三",25,true},
+			{"王丽",15,false},
+			{"余图",30,true},
+			{"余龙",23,true},
+			{"龙图",89,true},
+			{"龙龙",5,true},
+			{"图图",2,true},
+			{"余余",118,false}
+		};
+
+		virtual const PersonStruct& Get(size_t pos)
+		{
+			return m_people[pos];
+		}
+
+		virtual size_t Size()const
+		{
+			return 11;
+		}
+
+		virtual size_t Empty()const
+		{
+			return false;
+		}
+	};
+public:
+	MyTable() :
+		TableSurface("人员信息")
+	{
+		SetContainer(&m_people);
+		SetPageItemsCount(4);//默认是5，如果需要，调用此函数修改
+	}
+private:
+
+	PersonContainer m_people;
+
+	virtual bool OnItemPrint(const PersonStruct& item, bool isLastItem)
+	{
+		cp.DisplayRoom(item.name, 20).DisplayRoom(item.age, 10).DisplayRoom((item.isMale ? "男" : "女"), 10).DisplayLine().DisplayLine();
+		return true;
+	}
+
+	virtual bool OnItemTitlePrint()
+	{
+		cp.DisplayRoom("名字", 20).DisplayRoom("年龄", 10).DisplayRoom("性别", 10).DisplayLine().DisplayLine();
+		return true;
+	}
+
+};
+//MyMain.cpp
+#include "TestTable.h"
+void StartFrame()
+{
+	SurfaceManager::GetInstance().Start(new MyTable);
+}
+```
