@@ -20,7 +20,7 @@ public:
 	inline Surface* GetContext()const;
 
 private:
-	Surface* m_context;
+	Surface* m_context = nullptr;
 };
 Surface* UIComponent::GetContext()const
 {

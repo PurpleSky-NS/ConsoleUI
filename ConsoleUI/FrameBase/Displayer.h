@@ -17,10 +17,10 @@ public:
 	/*输出到ostream流中，可以是数据(ostream支持的)，也可以是flags(如std::fixed,std::setw等)*/
 	inline Displayer& Display(const T& content);
 
-	/* 显示指定位数的小数，@std::fixed @std::setprecision */
+	/* 显示指定位数的小数，输出完成自动清除标志位，@std::fixed @std::setprecision */
 	inline Displayer& DisplayPrecision(double v, size_t precision);
 
-	/* 显示科学计数法的小数，@std::scientific */
+	/* 显示科学计数法的小数，输出完成自动清除标志位，@std::scientific */
 	inline Displayer& DisplayScientific(double v);
 
 	/* 预留对齐空间，@std::setw */
@@ -46,8 +46,10 @@ public:
 	inline Displayer& DisplaySpace(unsigned count = 1);
 
 	template<class T>
+	/*输出到Message缓冲区中，每条消息为一行，并且在前面加入标志*/
 	inline Displayer& DisplayOK(const T& content);
 
+	/*输出到Message缓冲区中，每条消息为一行，并且在前面加入标志*/
 	template<class T>
 	inline Displayer& DisplayError(const T& content);
 
@@ -105,13 +107,13 @@ inline Displayer& Displayer::DisplayRoom(size_t width)
 
 inline Displayer& Displayer::DisplayLeft()
 {
-	m_buf.setf(m_buf.left);
+	m_buf << std::left;
 	return *this;
 }
 
 inline Displayer& Displayer::DisplayRight()
 {
-	m_buf.setf(m_buf.right);
+	m_buf << std::right;
 	return *this;
 }
 

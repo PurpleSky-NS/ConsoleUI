@@ -14,16 +14,22 @@ public:
 
 	~SurfaceManager();
 
+	/*获取当前栈顶（活动）界面*/
 	Surface* GetActive()const;
 
+	/*启动一个界面并且压入界面栈*/
 	void Start(Surface* surface);
 
+	/*关闭栈顶（活动）界面*/
 	void CloseTop();
 
+	/*关闭所有界面*/
 	void CloseAll();
 
+	/*向栈顶揭秘那传入事件字符*/
 	void PostEvent(char inputText)const;
 
+	/*界面栈是否为空*/
 	bool Empty()const;
 
 private:
