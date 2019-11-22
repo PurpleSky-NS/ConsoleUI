@@ -337,7 +337,10 @@ void StartFrame()
 **注意：**
 没有使用命令行输入缓冲，使用的是 *_getch* 函数传递事件字符，所以，退格字符等事件需要自己编写<br>
 
-![运行程序](/image/Test0.png) <br>
+![运行程序](/image/Test0.png)
+
+<br>
+
 ![输入](/image/Test1.png)
 
 ### 内置的界面类
@@ -392,7 +395,83 @@ void StartFrame()
 	SurfaceManager::GetInstance().Start(new MyMenu);
 }
 ```
-![菜单](/image/TestMenu0.png) <br>
+
+![菜单](/image/TestMenu0.png)
+
+<br>
+
 ![选择选项](/image/TestMenu1.png)
 
+#### EditorSurface
+一个输入编辑器界面，也就是一个表单界面，用户输入各个文本项，然后提交内容共开发者处理<br>
+下面给出各个定义：
+```
+/*输入字符* 返回值:是否通过测试
+ * 参数:输入的字符
+ */
+typedef std::function<bool(char)> OnInputTest;
+/*数据输入完成/切换输入数据选项回调
+ * 返回值:是否通过测试
+ * 第一个参数:输入的文本
+ * 第二个参数:错误提示文本，设置该值来设置错误信息，若设为空字符串则于返回true效果相同
+ */
+typedef std::function<bool(std::string&, std::string&)> OnFinishTest;时回调
+ 
+
+/* 构造函数
+ * 参数:
+ * @title:表单标题
+ * @describe:表单描述
+ */
+EditorSurface(const std::string& title, const std::string& describe);
+
+
+/* 添加可编辑项
+ * 参数:
+ * @name:数据ID（应保证唯一）
+ * @text:显示的名称
+ * @tips:输入的提示，若为空，则没有提示，（如:"不少于10位数字")
+ * @onTestInput:判断输入字符的回调函数 @OnInputTest
+ * @onFinishTest:用户完成输入该项输入的回调函数 @OnFinishTest
+ * @isMask:是否使用字符遮掩(如密码输入)(默认false)
+ * @defaultInput:文本框默认值(默认"")
+ * throws:
+ * @ DataExistedException 若ID已存在则会抛出此异常
+ */
+void AddEditableData(const std::string& name, const std::string& text, const std::string& tips, OnInputTest onTestInput, OnFinishTest onFinishTest, bool isMask = false, const std::string defaultInput = "")throw(DataExistedException);
+
+/* 获取所有可编辑项的ID
+ * return:
+ * @std::vector<std::string> 所有ID的集合
+ */
+std::vector<std::string> GetDatasName()const;
+
+/* 根据数据的ID获取输入的数据
+ * 参数:
+ * @name:数据的ID
+ * return:
+ * @std::string& 一个可以修改的字符串
+ * throw
+ * @DataNotFoundException 数据不存在抛出这个
+ */
+std::string& GetInputData(const std::string& name)throw(DataNotFoundException);
+
+/* 设置某项数据的错误信息，使之错误
+ * 参数:
+ * @name:数据的ID
+ * @errMsg:错误信息，若为空字符串则清除错误
+ * throw
+ * @DataNotFoundException 数据不存在抛出这个
+ */
+void SetErrorText(const std::string& name, const std::string& errMsg)throw(DataNotFoundException);
+
+/* 用户提交数据回调，返回
+ * 参数:
+ * @mappingData:所有数据的键值对，以数据的ID为键，输入内容为值
+ * return:
+ * @bool 是否关闭该界面
+ */
+virtual bool OnPostData(const std::unordered_map<std::string, std::string>& mappingData);
+
+```
 # 其他的内容晚些时候再更新使用的
