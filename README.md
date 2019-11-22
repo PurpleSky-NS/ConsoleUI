@@ -674,3 +674,6 @@ void StartFrame()
 	SurfaceManager::GetInstance().Start(new MyTable);
 }
 ```
+
+![数据表](/image/TestTable0.png) <br>
+![翻页](/image/TestTable1.png)
