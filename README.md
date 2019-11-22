@@ -396,10 +396,7 @@ void StartFrame()
 }
 ```
 
-![菜单](/image/TestMenu0.png)
-
-<br>
-
+![菜单](/image/TestMenu0.png) <br>
 ![选择选项](/image/TestMenu1.png)
 
 #### EditorSurface
@@ -539,5 +536,8 @@ void StartFrame()
 	SurfaceManager::GetInstance().Start(new MyEditor);
 }
 ```
+
+![输入](/image/TestEditor0.png) <br>
+![提交按钮](/image/TestEditor1.png)
 
 # 其他的内容晚些时候再更新使用的
