@@ -406,7 +406,8 @@ void StartFrame()
 一个输入编辑器界面，也就是一个表单界面，用户输入各个文本项，然后提交内容共开发者处理<br>
 下面给出各个定义：
 ```
-/*输入字符* 返回值:是否通过测试
+/*输入字符时回调
+ * 返回值:是否通过测试
  * 参数:输入的字符
  */
 typedef std::function<bool(char)> OnInputTest;
@@ -415,7 +416,7 @@ typedef std::function<bool(char)> OnInputTest;
  * 第一个参数:输入的文本
  * 第二个参数:错误提示文本，设置该值来设置错误信息，若设为空字符串则于返回true效果相同
  */
-typedef std::function<bool(std::string&, std::string&)> OnFinishTest;时回调
+typedef std::function<bool(std::string&, std::string&)> OnFinishTest;
  
 
 /* 构造函数
