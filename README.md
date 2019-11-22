@@ -475,4 +475,69 @@ void SetErrorText(const std::string& name, const std::string& errMsg)throw(DataN
 virtual bool OnPostData(const std::unordered_map<std::string, std::string>& mappingData);
 
 ```
+注册用户的示例代码：
+```
+//TestEditor.h
+#pragma once
+
+#include "UIFrame.h"
+
+class MyEditor :public EditorSurface
+{
+public:
+	/*
+	 将会添加三个输入项，并进行相关配置
+	*/
+	MyEditor() :
+		EditorSurface("注册用户", "欢迎你，填写以下信息来注册成为我们的新用户，以便于使用我们的服务~")
+	{
+		AddEditableData("CardNum", "银行卡号", "10到13位的纯数字",
+			[](char c) {
+				return isdigit((unsigned char)c);
+			}, [](std::string& input, std::string& errMsg) {
+				if (input.size() >= 10 && input.size() <= 13)
+					return true;
+				errMsg = "卡号不符合规范";
+				return false;
+			});
+		AddEditableData("Password", "密码", "不得少于6位",
+			[](char c) {
+				return isalnum((unsigned char)c);
+			}, [&](std::string& input, std::string& errMsg) {
+				if (input.size() < 6)
+				{
+					errMsg = "密码过短";
+					return false;
+				}
+				/*修改密码会影响确认密码的结果*/
+				if (GetInputData("ConfirmPassword") != input)
+					SetErrorText("ConfirmPassword", "两次密码输入不一致");
+				return true;
+			}, true);
+		AddEditableData("ConfirmPassword", "确认密码", "不得少于6位，且必须包含英文和数字",
+			[](char c) {
+				return isalnum((unsigned char)c);
+			}, [&](std::string& input, std::string& errMsg) {
+				if (GetInputData("Password") == input)
+					return true;
+				errMsg = "两次密码输入不一致";
+				return false;
+			}, true);
+	}
+private:
+	virtual bool OnPostData(const std::unordered_map<std::string, std::string>& datas)
+	{
+		//用户输入完成，编写你的逻辑代码
+		return true;
+	}
+
+};
+//MyMain.cpp
+#include "TestEditor.h"
+void StartFrame()
+{
+	SurfaceManager::GetInstance().Start(new MyEditor);
+}
+```
+
 # 其他的内容晚些时候再更新使用的
