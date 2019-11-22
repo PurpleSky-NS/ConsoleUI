@@ -62,8 +62,277 @@ virtual void OnClose() {}
 ```
 void Refresh();
 ```
-默认使用**system("cls")**来清空控制台，如果不在Windows上或者有其他方法，可以调用以下方法设置清空控制台的方法
+默认使用(**system("cls")**)来清空控制台，如果不在Windows上或者有其他方法，可以调用以下方法设置清空控制台的方法
 ```
 static void SetConsoleClearCall(std::function<void()> onConsoleClear);
 ```
+<br>
+
+### 界面管理器
+SurfaceManager管理类，提供一个界面栈，并且是一个单例类<br>
+用SurfaceManager的静态方法来获取界面管理器的实例：
+```
+static SurfaceManager& GetInstance();
+```
+可以使用如下方法操作界面管理器：
+```
+/*获取当前栈顶（活动）界面*/
+Surface* GetActive()const;
+
+/*启动一个界面并且压入界面栈*/
+void Start(Surface* surface);
+
+/*关闭栈顶（活动）界面*/
+void CloseTop();
+
+/*关闭所有界面*/
+void CloseAll();
+
+/*向栈顶揭秘那传入事件字符*/
+void PostEvent(char inputText)const;
+  
+/*界面栈是否为空*/
+bool Empty()const;
+```
+比如你可以使用下面的代码启动或者关闭你的一个界面：
+```
+SurfaceManage::GetInstance().Start(new MySurface);
+SurfaceManage::GetInstance().CloseTop();
+```
+### UI组件
+UIComponent为UI组件的基类，自定义的UI组件最好继承自该类<br>
+子类可以重写下面的函数:<br>
+* OnPrint:界面要求UI组件输出时调用
+* OnEvent:事件传递机制，用户输入时调用，每个界面只有一个EventUI(获取事件的UI组件)
+* WillRegisterEvnet:重写该方法并且返回true，以注册成为EventUI
+```
+virtual void OnPrint() {}
+
+virtual void OnEvent(char inputText) {}
+
+virtual bool WillRegisterEvnet()const { return false; }
+```
+**EventUI**:每个界面只有一个获取事件的UI组件，通过重写@WillRegisterEvnet方法来注册成为该界面唯一的接收事件的UI组件<br>
+如果有多个UI组件要注册成为EventUI，那么按照界面添加UI组件的顺序选取最后一个作为UI组件<br>
+事件通过Surface::PostEvent方法传递给EventUI，如果界面重写了这个方法就会使这套事件机制失效<br>
+
+UI组件可以通过如下方法获取当前容器的界面:
+```
+Surface* GetContext()const;
+```
+### Displayer
+这是一个方便文本输出的类，通过引用ostream，来讲输出内容输出到ostream中，内置一个缓冲区<br>
+可以用如下方法构造:
+```
+/*通过引用一个ostream构造*/
+Displayer(std::ostream& out);
+```
+以下是输出方法：<br>
+```
+template<class T>
+/*输出到ostream流中，可以是数据(ostream支持的)，也可以是flags(如std::fixed,std::setw等)*/
+inline Displayer& Display(const T& content);
+
+/* 显示指定位数的小数，输出完成自动清除标志位，@std::fixed @std::setprecision */
+inline Displayer& DisplayPrecision(double v, size_t precision);
+
+/* 显示科学计数法的小数，输出完成自动清除标志位，@std::scientific */
+inline Displayer& DisplayScientific(double v);
+
+/* 预留对齐空间，@std::setw */
+inline Displayer& DisplayRoom(size_t width);
+
+template<class T>
+/* 对齐显示，@std::setw */
+inline Displayer& DisplayRoom(const T& content, size_t width);
+
+/* 左对齐显示，@std::ios::left */
+inline Displayer& DisplayLeft();
+
+/* 右对齐显示，@std::ios::right */
+inline Displayer& DisplayRight();
+
+inline Displayer& DisplayLine();
+
+template<class T>
+inline Displayer& DisplayLine(const T& content);
+
+inline Displayer& DisplayTab(unsigned count = 1);
+
+inline Displayer& DisplaySpace(unsigned count = 1);
+
+template<class T>
+/*输出到Message缓冲区中，每条消息为一行，并且在前面加入标志*/
+inline Displayer& DisplayOK(const T& content);
+
+/*输出到Message缓冲区中，每条消息为一行，并且在前面加入标志*/
+template<class T>
+inline Displayer& DisplayError(const T& content);
+
+/*设置ios::flags @ostream::setf(std flag[eg.std::ios::scientific])*/
+inline Displayer& DisplayIOSFlag(int mask);
+
+/*取消ios::flags @ostream::unsetf(std flag[eg.std::ios::scientific])*/
+inline Displayer& UnDisplayIOSFlag(int mask);
+```
+使用如下方法将输出内容刷新到ostream中，如果不调用则会一直缓存：
+* Flush:将除了DisplayError和DisplayerOK的内容刷新到ostream中
+* FlushMessage:将DisplayError和DisplayerOK的内容刷新到ostream中，并加上标志以及
+```
+void Flush();
+
+void FlushMessages();
+
+```
+默认提供一个引用cout的Displayer:'**cp**'，你可以在UI组件中使用它。
+### 入口函数
+该框架提供一个入口函数，用户需要定义该函数：
+```
+void StartFrame();
+```
+在该函数中你需要启动至少一个界面，否则程序将直接退出。
+### 定义一个UI组件
+首先你需要你的界面类继承自Surface
+```
+class MyCom :public UIComponent
+{
+};
+```
+通过在OnPrint使用cp来实现输出<br>
+注意：
+* 如果需要立即刷入ostream则可以调用Flush，否则可以不调用<br>
+* 尽量不要调用FlushMessage，界面会在刷新时自动调用这个方法，否则可能输出混乱
+```
+/*该组件只有显示功能*/
+class MyCom :public UIComponent
+{
+  void OnPrint()
+  {
+    cp.DisplayTab(2).DisplayLine("你好界面")
+      .DisplaySpace(4).DisplayLine("这是一个UI组件的输出")
+      .DisplaySpace(4).DisplayLine("这是第二行")
+      .DisplaySpace(4).Display("输出小数：").DisplayLine(1.523)
+      .DisplaySpace(4).Display("输出2位小数：").DisplayPrecision(1.523, 2).DisplayLine()
+      .DisplaySpace(4).Display("输出科学计数法小数：").DisplayScientific(1.523).DisplayLine()
+      .DisplaySpace(4).Display("输出对齐：").DisplayRoom("Hello", 10).DisplayRoom(10).Display("World").DisplayLine()
+      .DisplaySpace(4).Display("输出左对齐：").DisplayLeft().DisplayRoom("Hello", 10).DisplayRoom(10).Display("World").DisplayLine().DisplayRight()
+      .DisplaySpace(4).Display("输出IOS flag：").Display(std::fixed).Display(std::setprecision(2)).Display(std::left).Display(std::setw(10)).Display("Hello?").UnDisplayIOSFlag(std::ios::fixed).DisplayLine();
+  }
+};
+```
+可以注册这个UI组件来接受事件
+```
+/*该组件会将输入内容显示出来*/
+class EventCom :public UIComponent
+{
+  void OnPrint()
+  {
+    cp.Display("你的输入：").DisplayLine(m_text);
+  }
+
+  bool WillRegisterEvnet()const
+  {
+    return true;
+  }
+
+  void OnEvent(char input)
+  {
+    m_text += input;
+  }
+
+private:
+  std::string m_text;
+};
+```
+### 定义一个界面
+首先你需要你的界面类继承自Surface
+```
+class MySurface : public Surface
+{
+};
+```
+为你的界面添加UI组件：
+```
+class MySurface : public Surface
+{
+class MyCom;
+class EventCom;
+public:
+	MySurface()
+	{
+		Add(new MyCom);
+		Add(new EventCom);
+	}
+};
+```
+完整界面测试代码：
+```
+//TestSurface.h
+#pragma once
+
+#include "UIFrame.h"
+
+class MySurface : public Surface
+{
+	class MyCom :public UIComponent
+	{
+		void OnPrint()
+		{
+			cp.DisplayTab(2).DisplayLine("你好界面")
+				.DisplaySpace(4).DisplayLine("这是一个UI组件的输出")
+				.DisplaySpace(4).DisplayLine("这是第二行")
+				.DisplaySpace(4).Display("输出小数：").DisplayLine(1.523)
+				.DisplaySpace(4).Display("输出2位小数：").DisplayPrecision(1.523, 2).DisplayLine()
+				.DisplaySpace(4).Display("输出科学计数法小数：").DisplayScientific(1.523).DisplayLine()
+				.DisplaySpace(4).Display("输出对齐：").DisplayRoom("Hello", 10).DisplayRoom(10).Display("World").DisplayLine()
+				.DisplaySpace(4).Display("输出对齐：").DisplayRoom("Hi", 10).DisplayRoom(10).Display("Sky").DisplayLine()
+				.DisplaySpace(4).Display("输出左对齐：").DisplayLeft().DisplayRoom("Hello", 10).DisplayRoom(10).Display("World").DisplayLine().DisplayRight()
+				.DisplaySpace(4).Display("输出左对齐：").DisplayLeft().DisplayRoom("Hi", 10).DisplayRoom(10).Display("Sky").DisplayLine().DisplayRight()
+				.DisplaySpace(4).Display("输出IOS flag：").Display(std::fixed).Display(std::setprecision(2)).Display(std::left).Display(std::setw(10)).Display("Hello ").Display(1.523).UnDisplayIOSFlag(std::ios::fixed).DisplayLine();
+		}
+	};
+	class EventCom :public UIComponent
+	{
+		void OnPrint()
+		{
+			cp.Display("你的输入：").DisplayLine(m_text);
+		}
+
+		bool WillRegisterEvnet()const
+		{
+			return true;
+		}
+
+		void OnEvent(char input)
+		{
+			m_text += input;
+			GetContext()->Refresh();//获取容器界面并且刷新界面
+		}
+
+	private:
+		std::string m_text;
+	};
+
+public:
+	MySurface()
+	{
+		/*必须时动态分配的，最后会自动释放内存*/
+		Add(new MyCom);
+		Add(new EventCom);
+	}
+};
+```
+### 运行程序
+在源文件编写程序入口，并且启动测试界面
+```
+//MyMain.cpp
+#include "UIFrame.h"
+#include "TestSurface.h"
+
+void StartFrame()
+{
+	SurfaceManager::GetInstance().Start(new MySurface);
+}
+```
+
 # 其他的内容晚些时候再更新
