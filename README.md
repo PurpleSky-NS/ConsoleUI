@@ -337,10 +337,7 @@ void StartFrame()
 **注意：**
 没有使用命令行输入缓冲，使用的是 *_getch* 函数传递事件字符，所以，退格字符等事件需要自己编写<br>
 
-![运行程序](/image/Test0.png)
-
-<br>
-
+![运行程序](/image/Test0.png) <br>
 ![输入](/image/Test1.png)
 
 ### 内置的界面类
@@ -395,11 +392,7 @@ void StartFrame()
 	SurfaceManager::GetInstance().Start(new MyMenu);
 }
 ```
-
-![菜单](/image/TestMenu0.png)
-
-<br>
-
+![菜单](/image/TestMenu0.png) <br>
 ![选择选项](/image/TestMenu1.png)
 
 # 其他的内容晚些时候再更新使用的
