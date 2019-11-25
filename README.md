@@ -192,14 +192,14 @@ void StartFrame();
 ```
 在该函数中你需要启动至少一个界面，否则程序将直接退出。
 ### 定义一个UI组件
-首先你需要你的界面类继承自Surface
+首先你需要你的UI组件类继承自UIComponent
 ```
 class MyCom :public UIComponent
 {
 };
 ```
 通过在OnPrint使用cp来实现输出<br>
-注意：
+**注意：**
 * 如果需要立即刷入ostream则可以调用Flush，否则可以不调用<br>
 * 尽量不要调用FlushMessage，界面会在刷新时自动调用这个方法，否则可能输出混乱
 ```
