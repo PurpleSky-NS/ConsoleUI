@@ -170,10 +170,10 @@ template<class T>
 inline Displayer& DisplayError(const T& content);
 
 /*设置ios::flags @ostream::setf(std flag[eg.std::ios::scientific])*/
-inline Displayer& DisplayIOSFlag(int mask);
+inline Displayer& DisplayIOSFlag(std::ios::fmflag mask);
 
 /*取消ios::flags @ostream::unsetf(std flag[eg.std::ios::scientific])*/
-inline Displayer& UnDisplayIOSFlag(int mask);
+inline Displayer& UnDisplayIOSFlag(std::ios::fmflag mask);
 ```
 使用如下方法将输出内容刷新到ostream中，如果不调用则会一直缓存：
 * Flush:将除了DisplayError和DisplayerOK的内容刷新到ostream中
@@ -337,10 +337,7 @@ void StartFrame()
 **注意：**
 没有使用命令行输入缓冲，使用的是 *_getch* 函数传递事件字符，所以，退格字符等事件需要自己编写<br>
 
-![运行程序](/image/Test0.png)
-
-<br>
-
+![运行程序](/image/Test0.png) <br>
 ![输入](/image/Test1.png)
 
 ### 内置的界面类
