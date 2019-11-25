@@ -54,10 +54,10 @@ public:
 	inline Displayer& DisplayError(const T& content);
 
 	/*设置ios::flags @ostream::setf(std flag[eg.std::ios::scientific])*/
-	inline Displayer& DisplayIOSFlag(int mask);
+	inline Displayer& DisplayIOSFlag(std::ios::fmtflags mask);
 
 	/*取消ios::flags @ostream::unsetf(std flag[eg.std::ios::scientific])*/
-	inline Displayer& UnDisplayIOSFlag(int mask);
+	inline Displayer& UnDisplayIOSFlag(std::ios::fmtflags mask);
 
 	void Flush();
 
@@ -156,13 +156,13 @@ inline Displayer& Displayer::DisplayError(const T& content)
 	return *this;
 }
 
-inline Displayer& Displayer::DisplayIOSFlag(int mask)
+inline Displayer& Displayer::DisplayIOSFlag(std::ios::fmtflags mask)
 {
 	m_buf.setf(mask);
 	return *this;
 }
 
-inline Displayer& Displayer::UnDisplayIOSFlag(int mask)
+inline Displayer& Displayer::UnDisplayIOSFlag(std::ios::fmtflags mask)
 {
 	m_buf.unsetf(mask);
 	return *this;
