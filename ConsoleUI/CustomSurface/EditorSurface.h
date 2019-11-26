@@ -173,7 +173,6 @@ private:
 					m_menuItems[m_inputIndex - m_datas.size()].onSelected();
 				return;
 			default:
-
 				if (m_inputIndex < m_datas.size() && m_datas[m_inputIndex].onTestInput(inputText))
 					m_datas[m_inputIndex].inputText += inputText;
 				break;

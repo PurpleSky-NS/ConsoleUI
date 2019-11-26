@@ -81,7 +81,7 @@ private:
 			{
 			case '\t':
 			case 's':
-				if (m_itemIndex + m_pageItemsCount > m_container->Size()) //如果是最后一页
+				if (m_itemIndex + m_pageItemsCount >= m_container->Size()) //如果是最后一页
 					m_itemIndex = 0;
 				else
 					m_itemIndex += m_pageItemsCount;
