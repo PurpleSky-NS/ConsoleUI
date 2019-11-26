@@ -184,6 +184,7 @@ Displayer& Flush();
 
 Displayer& FlushMessages();
 ```
+默认提供一个引用cout的Displayer:**Displayer cp**，你可以在UI组件及其他地方使用它。
 **拓展更新**<br>
 本次拓展主要拓展了多缓冲区的实现<br>
 加入了如下函数以及常量：
@@ -254,7 +255,6 @@ std::string str = cp.SwitchConcat()//或者cp.Switch(cp.CONCAT_BUFFER_INDEX)
 	.FlushOut();//刷出内容
 cp.SwitchDefault();//切换回默认流
 ```
-默认提供一个引用cout的Displayer:'**cp**'，你可以在UI组件中使用它。
 ### 入口函数
 该框架提供一个入口函数，用户需要定义该函数：
 ```
