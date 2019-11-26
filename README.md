@@ -58,7 +58,8 @@ virtual void OnClose() {}
 当用户有输入的时候，会通过PostEvent方法来传递用户输入字符(一次一个)<br>
 默认的PostEvent方法，处理了**事件UI组件**的流程，如果不需要这套机制可以重写，或者在它的基础上做一些处理<br>
 <br>
-在任何地方都可以调用该方法来刷新界面
+在任何地方都可以调用该方法来刷新界面<br>
+在该方法中会先依次调用UI组件的OnDisplay方法，在调用cp.Flush与cp.FlushMessage两个方法用来输出当前流内容以及信息流内容
 ```
 void Refresh();
 ```
@@ -179,10 +180,78 @@ inline Displayer& UnDisplayIOSFlag(std::ios::fmflag mask);
 * Flush:将除了DisplayError和DisplayerOK的内容刷新到ostream中
 * FlushMessage:将DisplayError和DisplayerOK的内容刷新到ostream中，并加上标志以及
 ```
-void Flush();
+Displayer& Flush();
 
-void FlushMessages();
+Displayer& FlushMessages();
+```
+**拓展更新**
+加入了如下函数以及常量：
+```
+/*创建一个缓冲流，自定义的流编号从2开始，做多只能有 @MAX_BUFFER_COUNT 个流*/
+inline Displayer& CreateDisplayBuffer();
 
+/*创建一个缓冲流，除了流编号同上外，为之命名，多个流不应该有同一个名字，做多只能有 @MAX_BUFFER_COUNT 个流*/
+inline Displayer& CreateDisplayBuffer(const std::string& bufName);
+
+/*是否存在该流*/
+inline bool ExistBuffer(BufferIndexType bufIndex);
+
+/*是否存在该流*/
+inline bool ExistBuffer(const std::string& bufName);
+
+/*是否存在该流*/
+inline BufferIndexType CurrentBuffer()const;
+
+/*切换至缓冲流*/
+inline Displayer& Switch(BufferIndexType bufIndex)throw(NoSuchBufferException);
+
+/*切换至缓冲流*/
+inline Displayer& Switch(const std::string& bufName)throw(NoSuchBufferException);
+
+/*切换至默认输出缓冲流*/
+inline Displayer& SwitchDefault();
+
+/*切换至信息输出缓冲流*/
+inline Displayer& SwitchMessage();
+
+/*刷出缓冲流*/
+Displayer& Flush();
+
+/*刷出特定缓冲流*/
+Displayer& Flush(BufferIndexType bufIndex)throw(NoSuchBufferException);
+
+/*刷出特定缓冲流*/
+Displayer& Flush(const std::string& bufName)throw(NoSuchBufferException);
+
+/*刷出信息缓冲流*/
+Displayer& FlushDefault();
+
+/*刷出信息缓冲流*/
+Displayer& FlushMessages();
+
+/*切换至拼接输出缓冲流*/
+inline Displayer& SwitchConcat();
+
+/*向某个流刷出当前缓冲流*/
+Displayer& FlushTo(BufferIndexType bufIndex)throw(NoSuchBufferException);
+
+/*向某个流刷出当前缓冲流*/
+Displayer& FlushTo(const std::string& bufName)throw(NoSuchBufferException);
+
+/*向外刷出当前缓冲流*/
+std::string FlushOut();
+
+/*获取当前缓冲流内容，但是不刷出*/
+std::string GetBuffer();
+```
+可以在一个Displayer中创建多个流，从而可以达到内容分别输出到不同流的功能<br>
+通过这个还可以使用一个缓冲区进行字符串与其他类型的拼接功能：
+```
+double d = 1.234;
+std::string str = cp.SwitchConcat()//或者cp.Switch(cp.CONCAT_BUFFER_INDEX)
+	.Display("保留两位小数小数：").DisplayPrecision(d, 2)//输出内容
+	.FlushOut();//刷出内容
+cp.SwitchDefault();//切换回默认流
 ```
 默认提供一个引用cout的Displayer:'**cp**'，你可以在UI组件中使用它。
 ### 入口函数
