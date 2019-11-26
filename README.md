@@ -184,7 +184,8 @@ Displayer& Flush();
 
 Displayer& FlushMessages();
 ```
-**拓展更新**
+**拓展更新**<br>
+本次拓展主要拓展了多缓冲区的实现<br>
 加入了如下函数以及常量：
 ```
 /*创建一个缓冲流，自定义的流编号从2开始，做多只能有 @MAX_BUFFER_COUNT 个流*/
