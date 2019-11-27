@@ -240,12 +240,16 @@ private:
 				m_datas[m_inputIndex].errorText.clear();
 			/*检查是否有错误输入*/
 			for (auto& i : m_datas)
+			{
+				if (i.onFinishInput(i.inputText, i.errorText))
+					i.errorText.clear();
 				if (!i.errorText.empty())
 				{
 					cp.DisplayError("存在错误的输入项，请修改后提交~");
 					GetContext()->Refresh();
 					return;
 				}
+			}
 			if (m_onPost(GetMappingData()))
 				SurfaceManager::GetInstance().CloseTop();
 			else
