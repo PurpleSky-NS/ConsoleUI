@@ -184,7 +184,7 @@ Displayer& Flush();
 
 Displayer& FlushMessages();
 ```
-默认提供一个引用cout的Displayer:**Displayer cp**，你可以在UI组件及其他地方使用它。
+默认提供一个引用cout的Displayer:**Displayer cp**，你可以在UI组件及其他地方使用它。<br>
 **拓展更新**<br>
 本次拓展主要拓展了多缓冲区的实现<br>
 加入了如下函数以及常量：
