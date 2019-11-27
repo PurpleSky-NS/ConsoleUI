@@ -235,9 +235,6 @@ private:
 
 		void PostData()
 		{
-			/*测试当前选项*/
-			if (m_inputIndex < m_datas.size() && m_datas[m_inputIndex].onFinishInput(m_datas[m_inputIndex].inputText, m_datas[m_inputIndex].errorText))
-				m_datas[m_inputIndex].errorText.clear();
 			/*检查是否有错误输入*/
 			for (auto& i : m_datas)
 			{
