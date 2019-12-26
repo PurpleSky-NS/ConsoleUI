@@ -3,17 +3,18 @@
 
 ## 配置
 配置很简单，在工程中包含ConsoleUI目录即可，不要更改里面的目录结构<br>
-请确保你的IDE或者编译器开启了c++11标准，或者加入如下编译参数<br>
+请确保你的IDE或者编译器开启了c++11或者更高的c++标准，或者加入如下编译参数<br>
 ``` 
 -std=c++11
 ```
-
+* 添加include目录到你的项目包含目录中<br>
+* 添加lib/(你的平台)目录到你的库目录中<br>
+* 在你的依赖项中添加相应库文件<br>
 ## 包含
 包含UIFrame.h文件即可，默认包含了整个框架工程
 ```c++
 #include "UIFrame.h"
 ```
-每个.cpp文件在对应的.h文件的同一个目录下
 ## 说明
 整个工程文件使用UTF-8编码，但是工程与程序中使用了中文，根据IDE配置编译参数，或者自行转码都行
 
@@ -748,3 +749,8 @@ void StartFrame()
 ## 其他
 这里有一个我用这个框架编写的小项目，可以参考：<br>
 [https://github.com/PurpleSky-NS/ATMSystem-With-ConsoleUI-](https://github.com/PurpleSky-NS/ATMSystem-With-ConsoleUI-)
+
+## 更新
+* 12-26<br>
+  * 更改了目录结构，生成静态库
+  * MenuSurface默认不添加退出项，但是添加了AddQuitItem方法来实现功能
