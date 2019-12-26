@@ -7,11 +7,9 @@
 ``` 
 -std=c++11
 ```
-
-添加include目录到你的项目包含目录中
-添加lib/(你的平台)目录到你的库目录中
-在你的依赖项中添加相应库文件
-
+* 添加include目录到你的项目包含目录中<br>
+* 添加lib/(你的平台)目录到你的库目录中<br>
+* 在你的依赖项中添加相应库文件<br>
 ## 包含
 包含UIFrame.h文件即可，默认包含了整个框架工程
 ```c++
@@ -753,6 +751,6 @@ void StartFrame()
 [https://github.com/PurpleSky-NS/ATMSystem-With-ConsoleUI-](https://github.com/PurpleSky-NS/ATMSystem-With-ConsoleUI-)
 
 ## 更新
-- 12-26<br>
-  - 更改了目录结构，生成静态库
-  - MenuSurface默认不添加退出项，但是添加了AddQuitItem方法来实现功能
+* 12-26<br>
+  * 更改了目录结构，生成静态库
+  * MenuSurface默认不添加退出项，但是添加了AddQuitItem方法来实现功能
