@@ -1,6 +1,6 @@
 ﻿#include <conio.h>
-#include "surfaceManager.h"
-#include "../CustomSurface/EditorSurface.h"
+#include "FrameBase/SurfaceManager.h"
+#include "CustomSurface/EditorSurface.h"
 
 int main()
 {
