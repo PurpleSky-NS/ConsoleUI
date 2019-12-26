@@ -9,7 +9,7 @@
 ```
 * 添加include目录到你的项目包含目录中<br>
 * 添加lib/(你的平台)目录到你的库目录中<br>
-* 在你的依赖项中添加相应库文件<br>
+* 在你的依赖项中添加相应库文件(Debug:ConsoleUI_debug.lib，Release:ConsoleUI_release.lib)<br>
 ## 包含
 包含UIFrame.h文件即可，默认包含了整个框架工程
 ```c++
