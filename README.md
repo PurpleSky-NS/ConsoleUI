@@ -13,7 +13,7 @@
 ## 包含
 包含UIFrame.h文件即可，默认包含了整个框架工程
 ```c++
-#include "UIFrame.h"
+#include "ConsolUI.h"
 ```
 ## 说明
 整个工程文件使用UTF-8编码，但是工程与程序中使用了中文，根据IDE配置编译参数，或者自行转码都行
