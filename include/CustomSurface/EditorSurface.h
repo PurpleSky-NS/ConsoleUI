@@ -75,7 +75,11 @@ private:
 				{"重置",std::bind(&EditorCom::Reset,this)},
 				{"退出",[]() {SurfaceManager::GetInstance().CloseTop(); } } }) {}
 
+<<<<<<< HEAD
 		void AddEditableData(const std::string& name, const std::string& text, const std::string& tips, OnInputTest onTestInput, OnFinishTest onFinishTest, bool isMask, const std::string defaultInput)throw(DataExistedException)
+=======
+		void AddEditableData(const std::string& name, const std::string& text, const std::string& tips, OnInputTest onTestInput, OnFinishTest onFinishTest, bool isMask, const std::string defaultInput)
+>>>>>>> 删掉了throw声明
 		{
 			for (auto& i : m_datas)
 				if (i.name == name)
@@ -103,7 +107,11 @@ private:
 			return datasName;
 		}
 
+<<<<<<< HEAD
 		std::string& GetInput(const std::string& name)throw(DataNotFoundException)
+=======
+		std::string& GetInput(const std::string& name)
+>>>>>>> 删掉了throw声明
 		{
 			for (auto& i : m_datas)
 				if (i.name == name)
@@ -111,7 +119,11 @@ private:
 			throw DataNotFoundException("数据[" + name + "]不存在，无法获取");
 		}
 
+<<<<<<< HEAD
 		void SetErrorText(const std::string& name, const std::string& errMsg)throw(DataNotFoundException)
+=======
+		void SetErrorText(const std::string& name, const std::string& errMsg)
+>>>>>>> 删掉了throw声明
 		{
 			for (auto& i : m_datas)
 				if (i.name == name)
@@ -305,7 +317,11 @@ protected:
 	 * throws:
 	 * @ DataExistedException 若ID已存在则会抛出此异常
 	 */
+<<<<<<< HEAD
 	void AddEditableData(const std::string& name, const std::string& text, const std::string& tips, OnInputTest onTestInput, OnFinishTest onFinishTest, bool isMask = false, const std::string defaultInput = "")throw(DataExistedException)
+=======
+	void AddEditableData(const std::string& name, const std::string& text, const std::string& tips, OnInputTest onTestInput, OnFinishTest onFinishTest, bool isMask = false, const std::string defaultInput = "")
+>>>>>>> 删掉了throw声明
 	{
 		m_editor->AddEditableData(name, text, tips, onTestInput, onFinishTest, isMask, defaultInput);
 	}
@@ -327,7 +343,11 @@ protected:
 	 * throw
 	 * @DataNotFoundException 数据不存在抛出这个
 	 */
+<<<<<<< HEAD
 	std::string& GetInputData(const std::string& name)throw(DataNotFoundException)
+=======
+	std::string& GetInputData(const std::string& name)
+>>>>>>> 删掉了throw声明
 	{
 		return m_editor->GetInput(name);
 	}
@@ -339,7 +359,11 @@ protected:
 	 * throw
 	 * @DataNotFoundException 数据不存在抛出这个
 	 */
+<<<<<<< HEAD
 	void SetErrorText(const std::string& name, const std::string& errMsg)throw(DataNotFoundException)
+=======
+	void SetErrorText(const std::string& name, const std::string& errMsg)
+>>>>>>> 删掉了throw声明
 	{
 		m_editor->SetErrorText(name, errMsg);
 	}
