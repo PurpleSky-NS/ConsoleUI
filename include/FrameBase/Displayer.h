@@ -95,17 +95,10 @@ public:
 	inline BufferIndexType CurrentBuffer()const;
 
 	/*切换至缓冲流*/
-<<<<<<< HEAD
-	inline Displayer& Switch(BufferIndexType bufIndex)throw(NoSuchBufferException);
-
-	/*切换至缓冲流*/
-	inline Displayer& Switch(const std::string& bufName)throw(NoSuchBufferException);
-=======
 	inline Displayer& Switch(BufferIndexType bufIndex);
 
 	/*切换至缓冲流*/
 	inline Displayer& Switch(const std::string& bufName);
->>>>>>> 删掉了throw声明
 
 	/*切换至默认输出缓冲流*/
 	inline Displayer& SwitchDefault();
@@ -120,17 +113,10 @@ public:
 	Displayer& Flush();
 
 	/*刷出特定缓冲流*/
-<<<<<<< HEAD
-	Displayer& Flush(BufferIndexType bufIndex)throw(NoSuchBufferException);
-
-	/*刷出特定缓冲流*/
-	Displayer& Flush(const std::string& bufName)throw(NoSuchBufferException);
-=======
 	Displayer& Flush(BufferIndexType bufIndex);
 
 	/*刷出特定缓冲流*/
 	Displayer& Flush(const std::string& bufName);
->>>>>>> 删掉了throw声明
 
 	/*刷出信息缓冲流*/
 	Displayer& FlushDefault();
@@ -139,17 +125,10 @@ public:
 	Displayer& FlushMessages();
 
 	/*向某个流刷出当前缓冲流*/
-<<<<<<< HEAD
-	Displayer& FlushTo(BufferIndexType bufIndex)throw(NoSuchBufferException);
-
-	/*向某个流刷出当前缓冲流*/
-	Displayer& FlushTo(const std::string& bufName)throw(NoSuchBufferException);
-=======
 	Displayer& FlushTo(BufferIndexType bufIndex);
 
 	/*向某个流刷出当前缓冲流*/
 	Displayer& FlushTo(const std::string& bufName);
->>>>>>> 删掉了throw声明
 
 	/*向外刷出当前缓冲流*/
 	std::string FlushOut();
@@ -302,22 +281,14 @@ inline Displayer::BufferIndexType Displayer::CurrentBuffer() const
 	return m_bufIndex;
 }
 
-<<<<<<< HEAD
-inline Displayer& Displayer::Switch(BufferIndexType bufIndex) throw(NoSuchBufferException)
-=======
 inline Displayer& Displayer::Switch(BufferIndexType bufIndex)
->>>>>>> 删掉了throw声明
 {
 	CheckBufferPar(bufIndex);
 	m_bufIndex = bufIndex;
 	return *this;
 }
 
-<<<<<<< HEAD
-inline Displayer& Displayer::Switch(const std::string& bufName) throw(NoSuchBufferException)
-=======
 inline Displayer& Displayer::Switch(const std::string& bufName)
->>>>>>> 删掉了throw声明
 {
 	CheckBufferPar(bufName);
 	m_bufIndex = m_mappingIndex[bufName];
