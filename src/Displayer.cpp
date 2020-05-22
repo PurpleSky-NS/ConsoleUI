@@ -7,7 +7,7 @@ Displayer& Displayer::Flush()
 	return *this;
 }
 
-Displayer& Displayer::Flush(BufferIndexType bufIndex)throw(NoSuchBufferException)
+Displayer& Displayer::Flush(BufferIndexType bufIndex)
 {
 	CheckBufferPar(bufIndex);
 	m_out << m_buffers[DEFAULT_BUFFER_INDEX].str() << std::flush;
@@ -15,7 +15,7 @@ Displayer& Displayer::Flush(BufferIndexType bufIndex)throw(NoSuchBufferException
 	return *this;
 }
 
-Displayer& Displayer::Flush(const std::string& bufName)throw(NoSuchBufferException)
+Displayer& Displayer::Flush(const std::string& bufName)
 {
 	CheckBufferPar(bufName);
 	m_out << m_buffers[m_mappingIndex[bufName]].str() << std::flush;
@@ -37,7 +37,7 @@ Displayer& Displayer::FlushMessages()
 	return *this;
 }
 
-Displayer& Displayer::FlushTo(BufferIndexType bufIndex) throw(NoSuchBufferException)
+Displayer& Displayer::FlushTo(BufferIndexType bufIndex)
 {
 	CheckBufferPar(bufIndex);
 	m_buffers[bufIndex] << m_buffers[m_bufIndex].str() << std::flush;
@@ -45,7 +45,7 @@ Displayer& Displayer::FlushTo(BufferIndexType bufIndex) throw(NoSuchBufferExcept
 	return *this;
 }
 
-Displayer& Displayer::FlushTo(const std::string& bufName) throw(NoSuchBufferException)
+Displayer& Displayer::FlushTo(const std::string& bufName)
 {
 	CheckBufferPar(bufName);
 	m_buffers[m_mappingIndex[bufName]] << m_buffers[m_bufIndex].str() << std::flush;
